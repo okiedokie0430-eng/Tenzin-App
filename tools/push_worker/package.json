@@ -1,0 +1,14 @@
+{
+  "name": "tenzin-push-worker",
+  "version": "0.1.0",
+  "description": "Worker to read FCM tokens stored in Appwrite and send pushes via Firebase Admin.",
+  "main": "send_pushes.js",
+  "scripts": {
+    "start": "node send_pushes.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^10.0.0",
+    "firebase-admin": "^11.9.0",
+    "dotenv": "^16.1.4"
+  }
+}

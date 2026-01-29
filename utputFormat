@@ -1,0 +1,26 @@
+HTTP/1.1 408 Request Timeout
+Connection: keep-alive
+Content-Length: 218
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: Accept, Origin, Cookie, Set-Cookie, Content-Type, Content-Range, X-Appwrite-Project, X-Appwrite-Key, X-Appwrite-Dev-Key, X-Appwrite-Locale, X-Appwrite-Mode, X-Appwrite-JWT, X-Appwrite-Response-Format, X-Appwrite-Timeout, X-Appwrite-ID, X-Appwrite-Timestamp, X-Appwrite-Session, X-Appwrite-Platform, X-SDK-Version, X-SDK-Name, X-SDK-Language, X-SDK-Platform, X-SDK-GraphQL, X-SDK-Profile, Range, Cache-Control, Expires, Pragma, X-Fallback-Cookies, X-Requested-With, X-Forwarded-For, X-Forwarded-User-Agent
+Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE
+Access-Control-Expose-Headers: X-Appwrite-Session, X-Fallback-Cookies
+Access-Control-Max-Age: 86400
+Cache-Control: no-cache, no-store, must-revalidate
+Content-Type: application/json; charset=UTF-8
+Expires: 0
+Pragma: no-cache
+Server: Appwrite
+Strict-Transport-Security: max-age=10886400
+X-Content-Type-Options: nosniff
+X-Debug-Fallback: true
+X-Debug-Speed: 30.024300098419
+Accept-Ranges: bytes
+Via: 1.1 varnish, 1.1 varnish
+Date: Mon, 26 Jan 2026 14:30:42 GMT
+X-Served-By: cache-sin-wsat1880043-SIN, cache-nrt-rjtt7900040-NRT
+X-Cache: MISS, MISS
+X-Cache-Hits: 0, 0
+X-Timer: S1769437813.767162,VS0,VE30105
+
+{"message":"Synchronous function execution timed out. Use asynchronous execution instead, or ensure the execution duration doesn't exceed 30 seconds.","code":408,"type":"function_synchronous_timeout","version":"1.8.1"}

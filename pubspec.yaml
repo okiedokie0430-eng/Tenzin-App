@@ -1,0 +1,91 @@
+name: tenzin
+description: Tenzin - Tibetan Learning App for Mongolian speakers. Offline-first, gamified learning.
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+  flutter: '>=3.16.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # State Management
+  flutter_riverpod: ^2.5.0
+  riverpod_annotation: ^2.3.0
+  
+  # Backend
+  appwrite: ^20.0.0
+  
+  # Firebase/FCM
+  firebase_core: ^3.8.1
+  firebase_messaging: ^15.1.6
+  
+  # Local Storage
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  path_provider: ^2.1.0
+  
+  # Secure Storage
+  flutter_secure_storage: ^9.0.0
+  
+  # Authentication
+  google_sign_in: ^6.2.0
+  
+  # Networking
+  connectivity_plus: ^6.0.0
+  
+  # Utilities
+  uuid: ^4.3.0
+  crypto: ^3.0.3
+  
+  # Audio
+  audioplayers: ^6.0.0
+  
+  # Image Handling
+  photo_view: ^0.15.0
+  palette_generator: ^0.3.2
+  gal: ^2.3.0
+  permission_handler: ^11.0.1
+  cached_network_image: ^3.3.1
+  image_picker: ^1.0.7
+  # HTTP client for Appwrite REST calls
+  http: ^0.13.6
+  # Lottie animations
+  lottie: ^2.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  # Code Generation
+  build_runner: ^2.4.0
+  riverpod_generator: ^2.3.0
+  
+  # Linting
+  flutter_lints: ^3.0.0
+  
+  # Testing
+  mockito: ^5.4.0
+  mocktail: ^1.0.0
+  
+  # App Icons & Splash
+  flutter_launcher_icons: ^0.13.0
+  flutter_native_splash: ^2.3.0
+  dart_code_metrics_presets: ^2.28.0
+  dart_appwrite: ^20.1.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/data/
+  
+  # TODO: Add Tibetan font when needed
+  # fonts:
+  #   - family: TibetanMachineUni
+  #     fonts:
+  #       - asset: assets/fonts/TibetanMachineUni.ttf

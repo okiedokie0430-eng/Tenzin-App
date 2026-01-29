@@ -1,0 +1,12 @@
+export 'splash/splash.dart';
+export 'onboarding/onboarding.dart';
+export 'auth/auth.dart';
+export 'home/home.dart';
+export 'lesson/lesson.dart';
+export 'settings/settings.dart';
+export 'achievements/achievements.dart';
+export 'leaderboard/leaderboard.dart';
+export 'support/support.dart';
+export 'profile/profile.dart';
+export 'notifications/notifications.dart';
+export 'friends/friends.dart';

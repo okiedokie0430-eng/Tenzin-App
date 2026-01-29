@@ -1,0 +1,26 @@
+﻿HTTP/1.1 401 Unauthorized
+Connection: keep-alive
+Content-Length: 132
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: Accept, Origin, Cookie, Set-Cookie, Content-Type, Content-Range, X-Appwrite-Project, X-Appwrite-Key, X-Appwrite-Dev-Key, X-Appwrite-Locale, X-Appwrite-Mode, X-Appwrite-JWT, X-Appwrite-Response-Format, X-Appwrite-Timeout, X-Appwrite-ID, X-Appwrite-Timestamp, X-Appwrite-Session, X-Appwrite-Platform, X-SDK-Version, X-SDK-Name, X-SDK-Language, X-SDK-Platform, X-SDK-GraphQL, X-SDK-Profile, Range, Cache-Control, Expires, Pragma, X-Fallback-Cookies, X-Requested-With, X-Forwarded-For, X-Forwarded-User-Agent
+Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE
+Access-Control-Expose-Headers: X-Appwrite-Session, X-Fallback-Cookies
+Access-Control-Max-Age: 86400
+Cache-Control: no-cache, no-store, must-revalidate
+Content-Type: application/json; charset=UTF-8
+Expires: 0
+Pragma: no-cache
+Server: Appwrite
+Strict-Transport-Security: max-age=10886400
+X-Content-Type-Options: nosniff
+X-Debug-Fallback: true
+X-Debug-Speed: 0.0050759315490723
+Accept-Ranges: bytes
+Via: 1.1 varnish, 1.1 varnish
+Date: Mon, 26 Jan 2026 13:48:51 GMT
+X-Served-By: cache-sin-wsss1830049-SIN, cache-nrt-rjtt7900025-NRT
+X-Cache: MISS, MISS
+X-Cache-Hits: 0, 0
+X-Timer: S1769435332.696997,VS0,VE82
+
+{"message":"User (role: guests) missing scopes ([\"users.read\"])","code":401,"type":"general_unauthorized_scope","version":"1.8.1"}

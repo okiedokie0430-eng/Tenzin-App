@@ -1,0 +1,977 @@
+{
+  "version": 2,
+  "words": [
+    {
+      "id": "word_001",
+      "tibetan_script": "གང་ཟག་གི་བདག་མེད",
+      "phonetic": "Гансаг-ги дагмэд",
+      "mongolian_translation": "Би үгүй",
+      "parent_word_id": null,
+      "depth_level": 0
+    },
+    {
+      "id": "word_002",
+      "tibetan_script": "ཡོད་པ",
+      "phonetic": "Ё-ба",
+      "mongolian_translation": "Байгаа",
+      "parent_word_id": "word_001",
+      "depth_level": 1
+    },
+    {
+      "id": "word_003",
+      "tibetan_script": "རྟག་པ",
+      "phonetic": "Дагва",
+      "mongolian_translation": "Мөнх",
+      "parent_word_id": "word_002",
+      "depth_level": 2
+    },
+    {
+      "id": "word_004",
+      "tibetan_script": "ཡན་གི་ཐོན་སེད་བརྩམས།",
+      "phonetic": "Намба тамжид-би давга",
+      "mongolian_translation": "Байдал бүхэнд мөнх",
+      "parent_word_id": "word_003",
+      "depth_level": 3
+    },
+    {
+      "id": "word_005",
+      "tibetan_script": "མངའ་སེ་མདོ་སམ",
+      "phonetic": "Рэ-гави дагба",
+      "mongolian_translation": "Заримдаа мөнх",
+      "parent_word_id": "word_003",
+      "depth_level": 3
+    },
+    {
+      "id": "word_006",
+      "tibetan_script": "དངཨོ་བོ།",
+      "phonetic": "Ойбо",
+      "mongolian_translation": "Мөнх бус",
+      "parent_word_id": "word_002",
+      "depth_level": 2
+    },
+    {
+      "id": "word_007",
+      "tibetan_script": "ཕུང་པོ་",
+      "phonetic": "Сүг",
+      "mongolian_translation": "Өлөг",
+      "parent_word_id": "word_006",
+      "depth_level": 3
+    },
+    {
+      "id": "word_008",
+      "tibetan_script": "དེའི་རིན་གོང་།",
+      "phonetic": "Чий сүг",
+      "mongolian_translation": "Гадаад өлөг",
+      "parent_word_id": "word_007",
+      "depth_level": 4
+    },
+    {
+      "id": "word_009",
+      "tibetan_script": "ལུས་ཀི་སེ་མཆེད་དང་།",
+      "phonetic": "Сүг-жи жэмчэд",
+      "mongolian_translation": "Дүрсний төрөл түгэхүй",
+      "parent_word_id": "word_008",
+      "depth_level": 5
+    },
+    {
+      "id": "word_010",
+      "tibetan_script": "དབིབས་།",
+      "phonetic": "Еов",
+      "mongolian_translation": "Хэлбэр",
+      "parent_word_id": "word_009",
+      "depth_level": 6
+    },
+    {
+      "id": "word_011",
+      "tibetan_script": "རིང་",
+      "phonetic": "Ринбо",
+      "mongolian_translation": "Урт",
+      "parent_word_id": "word_010",
+      "depth_level": 7
+    },
+    {
+      "id": "word_012",
+      "tibetan_script": "ཐུང་བ",
+      "phonetic": "Түнва",
+      "mongolian_translation": "Богино",
+      "parent_word_id": "word_010",
+      "depth_level": 7
+    },
+    {
+      "id": "word_013",
+      "tibetan_script": "མཐོན་པོ",
+      "phonetic": "Това",
+      "mongolian_translation": "Өндөр",
+      "parent_word_id": "word_010",
+      "depth_level": 7
+    },
+    {
+      "id": "word_014",
+      "tibetan_script": "མཐོན་པོ",
+      "phonetic": "Мава",
+      "mongolian_translation": "Нам",
+      "parent_word_id": "word_010",
+      "depth_level": 7
+    },
+    {
+      "id": "word_015",
+      "tibetan_script": "སུ་མ་ན།",
+      "phonetic": "Лхамба",
+      "mongolian_translation": "Дөрвөлжин",
+      "parent_word_id": "word_010",
+      "depth_level": 7
+    },
+    {
+      "id": "word_016",
+      "tibetan_script": "སོར་སོར",
+      "phonetic": "Дүмбо",
+      "mongolian_translation": "Бөөрөнхий",
+      "parent_word_id": "word_010",
+      "depth_level": 7
+    },
+    {
+      "id": "word_017",
+      "tibetan_script": "དལ་བུ",
+      "phonetic": "Чалэва",
+      "mongolian_translation": "Тэгш",
+      "parent_word_id": "word_010",
+      "depth_level": 7
+    },
+    {
+      "id": "word_018",
+      "tibetan_script": "ཕྱ་ལེ་བ་མ་ཡིན་པ",
+      "phonetic": "Чалэва ма-еинба",
+      "mongolian_translation": "Тэгш бус",
+      "parent_word_id": "word_010",
+      "depth_level": 7
+    },
+    {
+      "id": "word_019",
+      "tibetan_script": "ཁ་དོག",
+      "phonetic": "Хадог",
+      "mongolian_translation": "Өнгө",
+      "parent_word_id": "word_009",
+      "depth_level": 6
+    },
+    {
+      "id": "word_020",
+      "tibetan_script": "རྩ་བའི་ཁ་དོག།",
+      "phonetic": "За-ви хадог",
+      "mongolian_translation": "Үндсэн өнгө",
+      "parent_word_id": "word_019",
+      "depth_level": 7
+    },
+    {
+      "id": "word_021",
+      "tibetan_script": "ཐལ་མདོག་།",
+      "phonetic": "Гарбо",
+      "mongolian_translation": "Цагаан",
+      "parent_word_id": "word_020",
+      "depth_level": 8
+    },
+    {
+      "id": "word_022",
+      "tibetan_script": "སེར་པོ་།",
+      "phonetic": "Сэрбо",
+      "mongolian_translation": "Шар",
+      "parent_word_id": "word_020",
+      "depth_level": 8
+    },
+    {
+      "id": "word_023",
+      "tibetan_script": "དམར་པོ",
+      "phonetic": "Марбо",
+      "mongolian_translation": "Улаан",
+      "parent_word_id": "word_020",
+      "depth_level": 8
+    },
+    {
+      "id": "word_024",
+      "tibetan_script": "སོན་པོ",
+      "phonetic": "Онбо",
+      "mongolian_translation": "Хөх",
+      "parent_word_id": "word_020",
+      "depth_level": 8
+    },
+    {
+      "id": "word_025",
+      "tibetan_script": "ནག་པོ",
+      "phonetic": "Нагбу",
+      "mongolian_translation": "Хар",
+      "parent_word_id": "word_020",
+      "depth_level": 8
+    },
+    {
+      "id": "word_026",
+      "tibetan_script": "ཡན་ལག་གི་ཁ་དོག",
+      "phonetic": "Янлиг-ги хадог",
+      "mongolian_translation": "Завсрын өнгө",
+      "parent_word_id": "word_019",
+      "depth_level": 7
+    },
+    {
+      "id": "word_027",
+      "tibetan_script": "སིན་",
+      "phonetic": "Брин",
+      "mongolian_translation": "Үүл",
+      "parent_word_id": "word_026",
+      "depth_level": 8
+    },
+    {
+      "id": "word_028",
+      "tibetan_script": "པ་དུ་",
+      "phonetic": "Дүва",
+      "mongolian_translation": "Утаа",
+      "parent_word_id": "word_026",
+      "depth_level": 8
+    },
+    {
+      "id": "word_029",
+      "tibetan_script": "བ་རྡུལ་",
+      "phonetic": "Дүл",
+      "mongolian_translation": "Тоос",
+      "parent_word_id": "word_026",
+      "depth_level": 8
+    },
+    {
+      "id": "word_030",
+      "tibetan_script": "ཁགསྣོ།",
+      "phonetic": "Хүгна",
+      "mongolian_translation": "Униар",
+      "parent_word_id": "word_026",
+      "depth_level": 8
+    },
+    {
+      "id": "word_031",
+      "tibetan_script": "ཕྲན་སྣང་",
+      "phonetic": "Нанва",
+      "mongolian_translation": "Гэгээ",
+      "parent_word_id": "word_026",
+      "depth_level": 8
+    },
+    {
+      "id": "word_032",
+      "tibetan_script": "བ་མུན་པ།",
+      "phonetic": "Мүнба",
+      "mongolian_translation": "Харанхуй",
+      "parent_word_id": "word_026",
+      "depth_level": 8
+    },
+    {
+      "id": "word_033",
+      "tibetan_script": "གྲིབ་མ།",
+      "phonetic": "Дивма",
+      "mongolian_translation": "Сүүдэр",
+      "parent_word_id": "word_026",
+      "depth_level": 8
+    },
+    {
+      "id": "word_034",
+      "tibetan_script": "ཉི་མའི་འོད་ཟེར",
+      "phonetic": "Ни-ми одсэр",
+      "mongolian_translation": "Нарны гэрэл",
+      "parent_word_id": "word_026",
+      "depth_level": 8
+    },
+    {
+      "id": "word_035",
+      "tibetan_script": "དགོས་མཁོ",
+      "phonetic": "Да-и жэмчэд",
+      "mongolian_translation": "Дууны",
+      "parent_word_id": "word_008",
+      "depth_level": 5
+    },
+    {
+      "id": "word_036",
+      "tibetan_script": "སེམས་ཅན་དུ་སོན་པའི་སྒྲ།",
+      "phonetic": "Сэмжандү дон-би да",
+      "mongolian_translation": "Амьтанд өгүүлсэн дуун",
+      "parent_word_id": "word_035",
+      "depth_level": 6
+    },
+    {
+      "id": "word_037",
+      "tibetan_script": "སེམས་ཅན་དུ་མི་སོན་པའི་སྒྲ",
+      "phonetic": "Сэмжандү ми-дон-би да",
+      "mongolian_translation": "Амьтанд өгүүлээгүй дуун",
+      "parent_word_id": "word_035",
+      "depth_level": 6
+    },
+    {
+      "id": "word_038",
+      "tibetan_script": "དིའི་སེ་མཆེད",
+      "phonetic": "Дий жэмчэд",
+      "mongolian_translation": "Үнэр",
+      "parent_word_id": "word_008",
+      "depth_level": 5
+    },
+    {
+      "id": "word_039",
+      "tibetan_script": "ལྷན་སེས་ཀི་དི",
+      "phonetic": "Лханжэй-жи ди",
+      "mongolian_translation": "Хамт төрсөн үнэр",
+      "parent_word_id": "word_038",
+      "depth_level": 6
+    },
+    {
+      "id": "word_040",
+      "tibetan_script": "བ།ཆགས་པའི་དི་བ།",
+      "phonetic": "Жаржүн-ги ди",
+      "mongolian_translation": "Найруулж гаргасан үнэр",
+      "parent_word_id": "word_038",
+      "depth_level": 6
+    },
+    {
+      "id": "word_041",
+      "tibetan_script": "རེ་ དགོས་ དགོས",
+      "phonetic": "Ро-и жэмчэд",
+      "mongolian_translation": "Амтны",
+      "parent_word_id": "word_008",
+      "depth_level": 5
+    },
+    {
+      "id": "word_042",
+      "tibetan_script": "ཨངར་བ།",
+      "phonetic": "Арва",
+      "mongolian_translation": "Амтлаг",
+      "parent_word_id": "word_041",
+      "depth_level": 6
+    },
+    {
+      "id": "word_043",
+      "tibetan_script": "སྐྱུར་མོ",
+      "phonetic": "Жүрва",
+      "mongolian_translation": "Исгэлэн",
+      "parent_word_id": "word_041",
+      "depth_level": 6
+    },
+    {
+      "id": "word_044",
+      "tibetan_script": "ཁ་བ",
+      "phonetic": "Хава",
+      "mongolian_translation": "Гашуун",
+      "parent_word_id": "word_041",
+      "depth_level": 6
+    },
+    {
+      "id": "word_045",
+      "tibetan_script": "ཁ་ཚ་བ།",
+      "phonetic": "Гава",
+      "mongolian_translation": "Эхүүн",
+      "parent_word_id": "word_041",
+      "depth_level": 6
+    },
+    {
+      "id": "word_046",
+      "tibetan_script": "ཚ་བ།",
+      "phonetic": "Цава",
+      "mongolian_translation": "Халуун",
+      "parent_word_id": "word_041",
+      "depth_level": 6
+    },
+    {
+      "id": "word_047",
+      "tibetan_script": "ལན་ཚྭ་ཅན།",
+      "phonetic": "Лан цава",
+      "mongolian_translation": "Шорвог",
+      "parent_word_id": "word_041",
+      "depth_level": 6
+    },
+    {
+      "id": "word_048",
+      "tibetan_script": "རེག་བའི་སེ་མཆེད།",
+      "phonetic": "Рэгжа-и жэмчэд",
+      "mongolian_translation": "Хүрэлцэхүй",
+      "parent_word_id": "word_008",
+      "depth_level": 5
+    },
+    {
+      "id": "word_049",
+      "tibetan_script": "འབྱུང་བར་གྱུར་པའི་དེ།",
+      "phonetic": "Жүнбар жүр-ви дэ",
+      "mongolian_translation": "Махбод болсон хүрэлцэхүйэ",
+      "parent_word_id": "word_048",
+      "depth_level": 6
+    },
+    {
+      "id": "word_050",
+      "tibetan_script": "ས་།",
+      "phonetic": "Са",
+      "mongolian_translation": "Шороо",
+      "parent_word_id": "word_049",
+      "depth_level": 7
+    },
+    {
+      "id": "word_051",
+      "tibetan_script": "ཆུ།",
+      "phonetic": "Чү",
+      "mongolian_translation": "Ус",
+      "parent_word_id": "word_049",
+      "depth_level": 7
+    },
+    {
+      "id": "word_052",
+      "tibetan_script": "མེ།",
+      "phonetic": "Мэ",
+      "mongolian_translation": "Гал",
+      "parent_word_id": "word_049",
+      "depth_level": 7
+    },
+    {
+      "id": "word_053",
+      "tibetan_script": "རླུང་།",
+      "phonetic": "Лүн",
+      "mongolian_translation": "Хий",
+      "parent_word_id": "word_049",
+      "depth_level": 7
+    },
+    {
+      "id": "word_054",
+      "tibetan_script": "འབྱུང་འགྱུར་དུ་གྱུར་པའི་དེ",
+      "phonetic": "Жүнжүрдү жүр-ви дэ",
+      "mongolian_translation": "Махбодиос гарсан хүрэлцэхүй",
+      "parent_word_id": "word_048",
+      "depth_level": 6
+    },
+    {
+      "id": "word_055",
+      "tibetan_script": "འཇམ་པོ།",
+      "phonetic": "Жамба",
+      "mongolian_translation": "Зөөлөн",
+      "parent_word_id": "word_054",
+      "depth_level": 7
+    },
+    {
+      "id": "word_056",
+      "tibetan_script": "ལིབ་པ།",
+      "phonetic": "Зүвба",
+      "mongolian_translation": "Ширүүн",
+      "parent_word_id": "word_054",
+      "depth_level": 7
+    },
+    {
+      "id": "word_057",
+      "tibetan_script": "ལིཔོ།",
+      "phonetic": "Жиба",
+      "mongolian_translation": "Хүнд",
+      "parent_word_id": "word_054",
+      "depth_level": 7
+    },
+    {
+      "id": "word_058",
+      "tibetan_script": "ཡང་བསར",
+      "phonetic": "Янва",
+      "mongolian_translation": "Хөнгөн",
+      "parent_word_id": "word_054",
+      "depth_level": 7
+    },
+    {
+      "id": "word_059",
+      "tibetan_script": "གྲང་མོ",
+      "phonetic": "Данва",
+      "mongolian_translation": "Хүйтэн",
+      "parent_word_id": "word_054",
+      "depth_level": 7
+    },
+    {
+      "id": "word_060",
+      "tibetan_script": "ལོགས་པ",
+      "phonetic": "Дэйва",
+      "mongolian_translation": "Өлсөх",
+      "parent_word_id": "word_054",
+      "depth_level": 7
+    },
+    {
+      "id": "word_061",
+      "tibetan_script": "སོམ་པ།",
+      "phonetic": "Гомба",
+      "mongolian_translation": "Ангах",
+      "parent_word_id": "word_054",
+      "depth_level": 7
+    },
+    {
+      "id": "word_062",
+      "tibetan_script": "ས་དབོན་གཅིག་སེ",
+      "phonetic": "Нан-ги сүг",
+      "mongolian_translation": "Дотоод өлөг",
+      "parent_word_id": "word_007",
+      "depth_level": 4
+    },
+    {
+      "id": "word_063",
+      "tibetan_script": "མིག་གི་དབང་པོ་",
+      "phonetic": "Миг-ги ванбо",
+      "mongolian_translation": "Нүд",
+      "parent_word_id": "word_062",
+      "depth_level": 5
+    },
+    {
+      "id": "word_064",
+      "tibetan_script": "རྣ་བའི་དབང་པོ་",
+      "phonetic": "На-ви ванбо",
+      "mongolian_translation": "Чих",
+      "parent_word_id": "word_062",
+      "depth_level": 5
+    },
+    {
+      "id": "word_065",
+      "tibetan_script": "སྣའི་དབང་པོ་",
+      "phonetic": "На-и ванбо",
+      "mongolian_translation": "Хамар",
+      "parent_word_id": "word_062",
+      "depth_level": 5
+    },
+    {
+      "id": "word_066",
+      "tibetan_script": "ལྕེའི་དབང་པོ་",
+      "phonetic": "Жэ-и ванбо",
+      "mongolian_translation": "Хэл",
+      "parent_word_id": "word_062",
+      "depth_level": 5
+    },
+    {
+      "id": "word_067",
+      "tibetan_script": "ལུས་ཀྱི་དབང་པོ་",
+      "phonetic": "Лу-йи ванбо",
+      "mongolian_translation": "Биеийн эрхтэн",
+      "parent_word_id": "word_062",
+      "depth_level": 5
+    },
+    {
+      "id": "word_068",
+      "tibetan_script": "ཤེས་རྟོགས་",
+      "phonetic": "Шэйба",
+      "mongolian_translation": "Оюун Ухаан",
+      "parent_word_id": "word_006",
+      "depth_level": 3
+    },
+    {
+      "id": "word_069",
+      "tibetan_script": "ཚད་མ་",
+      "phonetic": "Цадма",
+      "mongolian_translation": "Шалгадгийн оюун",
+      "parent_word_id": "word_068",
+      "depth_level": 4
+    },
+    {
+      "id": "word_070",
+      "tibetan_script": "ཚད་མེད་ཤེས་བ།",
+      "phonetic": "Цадмин-жи шэйба",
+      "mongolian_translation": "Шалгадгийн бус ухаан",
+      "parent_word_id": "word_068",
+      "depth_level": 4
+    },
+    {
+      "id": "word_071",
+      "tibetan_script": "ལྡན་མིན་འདུ་བེད",
+      "phonetic": "Гансаг еинбар жүрби-дэ",
+      "mongolian_translation": "Төгөлдөр бус хуран үйлдэх",
+      "parent_word_id": "word_006",
+      "depth_level": 3
+    },
+    {
+      "id": "word_072",
+      "tibetan_script": "གང་ཟག་ཡིན་པར་གྱུར་པའི་དེ།",
+      "phonetic": "Гансаг еинбар жүрби дэ",
+      "mongolian_translation": "Бодгаль болдог тэр",
+      "parent_word_id": "word_071",
+      "depth_level": 4
+    },
+    {
+      "id": "word_073",
+      "tibetan_script": "གང་ཟག་མ་ཡིན་པར་གྱུར་པའི་དེ",
+      "phonetic": "Гансаг ма-еинбар жүрби дэ",
+      "mongolian_translation": "Бодгаль болдоггүй тэр",
+      "parent_word_id": "word_071",
+      "depth_level": 4
+    },
+    {
+      "id": "word_074",
+      "tibetan_script": "མེད་པ་།",
+      "phonetic": "Меба",
+      "mongolian_translation": "Байхгүй",
+      "parent_word_id": "word_001",
+      "depth_level": 1
+    }
+  ],
+  "lessons": [
+    {
+      "id": "lesson_001",
+      "sequence_order": 1,
+      "tree_path": ["word_001", "word_002", "word_003", "word_004"],
+      "word_ids": ["word_001", "word_002", "word_003", "word_004"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_002",
+      "sequence_order": 2,
+      "tree_path": ["word_001", "word_002", "word_003", "word_005"],
+      "word_ids": ["word_001", "word_002", "word_003", "word_005"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_003",
+      "sequence_order": 3,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_011"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_011"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_004",
+      "sequence_order": 4,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_012"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_012"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_005",
+      "sequence_order": 5,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_013"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_013"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_006",
+      "sequence_order": 6,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_014"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_014"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_007",
+      "sequence_order": 7,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_015"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_015"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_008",
+      "sequence_order": 8,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_016"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_016"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_009",
+      "sequence_order": 9,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_017"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_017"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_010",
+      "sequence_order": 10,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_018"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_010", "word_018"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_011",
+      "sequence_order": 11,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_021"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_021"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_012",
+      "sequence_order": 12,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_022"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_022"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_013",
+      "sequence_order": 13,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_023"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_023"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_014",
+      "sequence_order": 14,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_024"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_024"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_015",
+      "sequence_order": 15,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_025"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_020", "word_025"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_016",
+      "sequence_order": 16,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_027"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_027"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_017",
+      "sequence_order": 17,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_028"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_028"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_018",
+      "sequence_order": 18,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_029"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_029"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_019",
+      "sequence_order": 19,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_030"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_030"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_020",
+      "sequence_order": 20,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_031"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_031"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_021",
+      "sequence_order": 21,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_032"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_032"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_022",
+      "sequence_order": 22,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_033"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_033"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_023",
+      "sequence_order": 23,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_034"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_009", "word_019", "word_026", "word_034"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_024",
+      "sequence_order": 24,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_035", "word_036"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_035", "word_036"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_025",
+      "sequence_order": 25,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_035", "word_037"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_035", "word_037"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_026",
+      "sequence_order": 26,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_038", "word_039"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_038", "word_039"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_027",
+      "sequence_order": 27,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_038", "word_040"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_038", "word_040"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_028",
+      "sequence_order": 28,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_042"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_042"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_029",
+      "sequence_order": 29,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_043"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_043"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_030",
+      "sequence_order": 30,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_044"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_044"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_031",
+      "sequence_order": 31,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_045"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_045"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_032",
+      "sequence_order": 32,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_046"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_046"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_033",
+      "sequence_order": 33,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_047"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_041", "word_047"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_034",
+      "sequence_order": 34,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_049", "word_050"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_049", "word_050"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_035",
+      "sequence_order": 35,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_049", "word_051"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_049", "word_051"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_036",
+      "sequence_order": 36,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_049", "word_052"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_049", "word_052"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_037",
+      "sequence_order": 37,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_049", "word_053"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_049", "word_053"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_038",
+      "sequence_order": 38,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_055"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_055"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_039",
+      "sequence_order": 39,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_056"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_056"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_040",
+      "sequence_order": 40,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_057"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_057"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_041",
+      "sequence_order": 41,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_058"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_058"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_042",
+      "sequence_order": 42,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_059"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_059"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_043",
+      "sequence_order": 43,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_060"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_060"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_044",
+      "sequence_order": 44,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_061"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_008", "word_048", "word_054", "word_061"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_045",
+      "sequence_order": 45,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_063"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_063"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_046",
+      "sequence_order": 46,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_064"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_064"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_047",
+      "sequence_order": 47,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_065"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_065"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_048",
+      "sequence_order": 48,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_066"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_066"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_049",
+      "sequence_order": 49,
+      "tree_path": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_067"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_007", "word_062", "word_067"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_050",
+      "sequence_order": 50,
+      "tree_path": ["word_001", "word_002", "word_006", "word_068", "word_069"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_068", "word_069"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_051",
+      "sequence_order": 51,
+      "tree_path": ["word_001", "word_002", "word_006", "word_068", "word_070"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_068", "word_070"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_052",
+      "sequence_order": 52,
+      "tree_path": ["word_001", "word_002", "word_006", "word_071", "word_072"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_071", "word_072"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_053",
+      "sequence_order": 53,
+      "tree_path": ["word_001", "word_002", "word_006", "word_071", "word_073"],
+      "word_ids": ["word_001", "word_002", "word_006", "word_071", "word_073"],
+      "is_leaf_lesson": true
+    },
+    {
+      "id": "lesson_054",
+      "sequence_order": 54,
+      "tree_path": ["word_001", "word_074"],
+      "word_ids": ["word_001", "word_074"],
+      "is_leaf_lesson": true
+    }
+  ]
+}

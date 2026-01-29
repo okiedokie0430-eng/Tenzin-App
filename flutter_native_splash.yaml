@@ -1,0 +1,32 @@
+/// Run: flutter pub run flutter_native_splash:create
+flutter_native_splash:
+  # Light mode
+  color: "#FFFFFF"
+  image: assets/images/splash_logo.png
+  branding: assets/images/splash_branding.png
+  branding_mode: bottom
+
+  # Dark mode
+  color_dark: "#121212"
+  image_dark: assets/images/splash_logo_dark.png
+  branding_dark: assets/images/splash_branding_dark.png
+
+  # Android settings
+  android: true
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#121212"
+    image: assets/images/splash_logo.png
+    image_dark: assets/images/splash_logo_dark.png
+    icon_background_color: "#6B4EFF"
+    icon_background_color_dark: "#9B8AFF"
+
+  # iOS settings
+  ios: true
+  ios_content_mode: center
+
+  # Web settings
+  web: false
+
+  # Keep full screen
+  fullscreen: true
