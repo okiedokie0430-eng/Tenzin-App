@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 
 import 'app.dart';
 import 'data/data.dart';
@@ -69,10 +70,17 @@ void main() async {
   final achievementDataLoader = AchievementDataLoader(dbHelper);
   await achievementDataLoader.loadAchievements();
 
+  // Liquid glass shader-үүдийг урьдчилан ачаалах (first-frame jank-аас сэргийлнэ)
+  await LiquidGlassWidgets.initialize();
+
   // Апп эхлүүлэх
   runApp(
-    const ProviderScope(
-      child: TenzinApp(),
+    LiquidGlassWidgets.wrap(
+      // MaterialApp-ийн ThemeMode-ийг glass widget-үүдэд дамжуулна
+      brightnessResolver: Theme.maybeBrightnessOf,
+      child: const ProviderScope(
+        child: TenzinApp(),
+      ),
     ),
   );
 }

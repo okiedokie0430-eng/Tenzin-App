@@ -17,22 +17,14 @@ import '../../providers/progress_provider.dart';
 import '../../providers/heart_provider.dart';
 import '../../providers/sync_provider.dart';
 import '../../../data/models/lesson.dart';
-import '../../../core/constants/app_colors.dart' as app;
 import '../../widgets/common/heart_display.dart';
+import '../../widgets/lesson/lesson_pathway.dart';
 import '../streaks/streak_overview_screen.dart';
 // lesson_picking_sheet removed: lessons open directly now
 
-// =============================================================================
-// PERFORMANCE: Pre-computed colors to avoid repeated allocations
-// =============================================================================
-class _LessonColors {
-  static const Color completedGreen = Color(0xFF38A169);
-  static const Color lockedGray = Color(0xFF9CA3AF);
-  static const Color lockedGrayLight = Color(0xFFE5E7EB);
-  static const Color heartRed = Color(0xFFE53E3E);
-  static const Color xpYellow = Color(0xFFECC94B);
-  static const Color streakOrange = Color(0xFFED8936);
-}
+// Home-tab palette is monochrome for now (theme onSurface greys).
+// TODO(accent): add the chosen brand accent here and thread it through
+// the pills, current-lesson card and pathway nodes.
 
 // =============================================================================
 // LessonsTab - Main Widget (LOGIC PRESERVED FROM _LearnTab)
@@ -86,10 +78,10 @@ class _LessonsTabState extends ConsumerState<LessonsTab> {
                         },
                 ),
               ),
-            // UI: Dictionary FAB - positioned at bottom right, snapped near nav bar
+            // UI: Dictionary FAB - floats above the bottom dock
             Positioned(
               right: 16,
-              bottom: 8,
+              bottom: 104,
               child: _DictionaryFab(
                 onPressed: () {
                   // LOGIC PRESERVED: Same navigation
@@ -178,7 +170,7 @@ class _LessonsTabState extends ConsumerState<LessonsTab> {
               ? null
               : () => openLessonDirect(currentLesson),
         ),
-        // UI REVAMPED: Continuous vertical lesson list
+        // UI: Winding lesson pathway (tried snippet design, wired to real data)
         Expanded(
           child: RefreshIndicator(
             onRefresh: () async {
@@ -186,12 +178,12 @@ class _LessonsTabState extends ConsumerState<LessonsTab> {
                 await ref.read(lessonsProvider.notifier).loadLessons();
               }
             },
-            child: _ContinuousLessonList(
-                  lessons: lessons,
-                  progressMap: progressState.lessonProgress,
-                  activeIndex: activeIndex,
-                  onLessonTap: openLessonDirect,
-                ),
+            child: LessonPathway(
+              lessons: lessons,
+              progressMap: progressState.lessonProgress,
+              activeIndex: activeIndex,
+              onLessonTap: openLessonDirect,
+            ),
           ),
         ),
       ],
@@ -300,7 +292,8 @@ class _LessonsHeader extends ConsumerWidget {
                 Expanded(
                   child: _StatPill(
                     icon: Icons.bolt_rounded,
-                    iconColor: _LessonColors.xpYellow,
+                    // TODO(accent): monochrome for now; tint with brand accent later.
+                    iconColor: theme.colorScheme.onSurface,
                     value: '$xp',
                     subtitle: 'XP',
                   ),
@@ -318,7 +311,7 @@ class _LessonsHeader extends ConsumerWidget {
                         : null,
                     child: _StatPill(
                       icon: Icons.local_fire_department_rounded,
-                      iconColor: _LessonColors.streakOrange,
+                      iconColor: theme.colorScheme.onSurface,
                       value: '$streak',
                       subtitle: 'Streak',
                       enabled: streakEnabled,
@@ -564,7 +557,7 @@ class _HeartStatPillState extends State<_HeartStatPill>
             Icon(
               Icons.favorite_rounded,
               size: 20,
-              color: _LessonColors.heartRed,
+              color: theme.colorScheme.onSurface,
             ),
             const SizedBox(width: 6),
             Column(
@@ -634,12 +627,15 @@ class _HeartDropdownContent extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: _LessonColors.heartRed.withOpacity(0.1),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withOpacity(0.08),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
                     Icons.favorite,
-                    color: _LessonColors.heartRed,
+                    color: Theme.of(context).colorScheme.onSurface,
                     size: 28,
                   ),
                 ),
@@ -657,7 +653,8 @@ class _HeartDropdownContent extends StatelessWidget {
                       Text(
                         '$currentHearts / $maxHearts',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: _LessonColors.heartRed,
+                              color:
+                                  Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w600,
                             ),
                       ),
@@ -676,7 +673,9 @@ class _HeartDropdownContent extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Icon(
                     index < currentHearts ? Icons.favorite : Icons.favorite_border,
-                    color: index < currentHearts ? _LessonColors.heartRed : Colors.grey.shade300,
+                    color: index < currentHearts
+                        ? Theme.of(context).colorScheme.onSurface
+                        : Colors.grey.shade300,
                     size: 28,
                   ),
                 ),
@@ -743,9 +742,13 @@ class _CurrentLessonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // Monochrome current-lesson card (accent TBD).
+    // TODO(accent): restore brand tint using the chosen accent color.
+    final onSurface = theme.colorScheme.onSurface;
+    final onContrast = theme.colorScheme.surface;
 
     return Material(
-      color: app.AppColors.primary.withOpacity(0.08),
+      color: onSurface.withOpacity(0.05),
       borderRadius: BorderRadius.circular(20),
       child: InkWell(
         onTap: onTap,
@@ -755,7 +758,7 @@ class _CurrentLessonCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: app.AppColors.primary.withOpacity(0.2),
+              color: onSurface.withOpacity(0.18),
               width: 1.5,
             ),
           ),
@@ -771,9 +774,9 @@ class _CurrentLessonCard extends StatelessWidget {
                     CircularProgressIndicator(
                       value: progress.clamp(0.0, 1.0),
                       strokeWidth: 4,
-                      backgroundColor: app.AppColors.primary.withOpacity(0.15),
-                      valueColor: const AlwaysStoppedAnimation<Color>(
-                        app.AppColors.primary,
+                      backgroundColor: onSurface.withOpacity(0.12),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        onSurface,
                       ),
                       strokeCap: StrokeCap.round,
                     ),
@@ -781,12 +784,12 @@ class _CurrentLessonCard extends StatelessWidget {
                       width: 44,
                       height: 44,
                       decoration: BoxDecoration(
-                        color: app.AppColors.primary,
+                        color: onSurface,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.play_arrow_rounded,
-                        color: Colors.white,
+                        color: onContrast,
                         size: 26,
                       ),
                     ),
@@ -802,7 +805,7 @@ class _CurrentLessonCard extends StatelessWidget {
                     Text(
                       'Үргэлжлүүлэх',
                       style: theme.textTheme.labelMedium?.copyWith(
-                        color: app.AppColors.primary,
+                        color: onSurface,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -831,671 +834,18 @@ class _CurrentLessonCard extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: app.AppColors.primary,
+                  color: onSurface,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_forward_rounded,
-                  color: Colors.white,
+                  color: onContrast,
                   size: 22,
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-// =============================================================================
-// CONTINUOUS VERTICAL LESSON LIST - PERFORMANCE OPTIMIZED
-// =============================================================================
-
-class _ContinuousLessonList extends StatefulWidget {
-  final List<LessonModel> lessons;
-  final Map<String, double> progressMap;
-  final int activeIndex;
-  final ValueChanged<LessonModel> onLessonTap;
-
-  const _ContinuousLessonList({
-    required this.lessons,
-    required this.progressMap,
-    required this.activeIndex,
-    required this.onLessonTap,
-  });
-
-  @override
-  State<_ContinuousLessonList> createState() => _ContinuousLessonListState();
-
-}
-
-
-class _ContinuousLessonListState extends State<_ContinuousLessonList> {
-  final ScrollController _scrollController = ScrollController();
-  final Map<int, GlobalKey> _itemKeys = {};
-  int? _lastScrolledIndex;
-
-  // Approximate item height used by the painter for positioning
-  static const double _approxItemHeight = 104.0;
-  static const double _listTopPadding = 8.0;
-
-
-  int _findHighestUnlockedIndex() {
-    int highestCompletedIndex = -1;
-    for (var i = widget.lessons.length - 1; i >= 0; i--) {
-      final progress = widget.progressMap[widget.lessons[i].id] ?? 0.0;
-      if (progress >= 1.0) {
-        highestCompletedIndex = i;
-        break;
-      }
-    }
-    if (highestCompletedIndex < 0) return 0;
-    return (highestCompletedIndex + 1).clamp(0, widget.lessons.length - 1);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeScrollToUnlocked());
-  }
-
-  @override
-  void didUpdateWidget(covariant _ContinuousLessonList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // If lessons changed or progress changed, consider scrolling to newest unlocked
-    if (oldWidget.lessons.length != widget.lessons.length || oldWidget.progressMap != widget.progressMap) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _maybeScrollToUnlocked());
-    }
-  }
-
-  void _maybeScrollToUnlocked() {
-    if (widget.lessons.isEmpty) return;
-    final targetIndex = _findHighestUnlockedIndex();
-    if (_lastScrolledIndex != null && _lastScrolledIndex == targetIndex) return;
-
-    // If we have a key for the target item, try to ensure it's visible at the top.
-    final key = _itemKeys[targetIndex];
-    final ctx = key?.currentContext;
-    if (ctx != null) {
-      Scrollable.ensureVisible(
-        ctx,
-        duration: const Duration(milliseconds: 300),
-        alignment: 0.0,
-        curve: Curves.easeOut,
-      );
-      _lastScrolledIndex = targetIndex;
-      return;
-    }
-
-    // Fallback: approximate item height and jump to offset
-    const approxItemHeight = 104.0; // average between 100 and 108
-    final offset = (targetIndex * approxItemHeight).clamp(0.0, _scrollController.position.maxScrollExtent);
-    _scrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    ).then((_) => _lastScrolledIndex = targetIndex);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  // Reuse the original build logic but hook controller and keys
-  @override
-  Widget build(BuildContext context) {
-    if (widget.lessons.isEmpty) {
-      return const Center(child: Text('Хичээлүүд байхгүй байна'));
-    }
-
-    final highestUnlockedIndex = _findHighestUnlockedIndex();
-
-    return Stack(
-      children: [
-        // Connector layer painted once for visible items
-        Positioned.fill(
-          child: CustomPaint(
-            painter: LessonConnectorPainter(
-              lessons: widget.lessons,
-              progressMap: widget.progressMap,
-              scrollController: _scrollController,
-              itemHeight: _ContinuousLessonListState._approxItemHeight,
-              topPadding: _ContinuousLessonListState._listTopPadding,
-              theme: Theme.of(context),
-            ),
-          ),
-        ),
-
-        ListView.builder(
-          controller: _scrollController,
-          padding: const EdgeInsets.only(top: 8, bottom: 100),
-          itemCount: widget.lessons.length,
-          cacheExtent: 300,
-          itemBuilder: (context, index) {
-        final lesson = widget.lessons[index];
-        // reuse the helper by creating a temporary _LessonState
-        final progress = widget.progressMap[lesson.id] ?? 0.0;
-        final isCompleted = progress >= 1.0;
-        final isLocked = index > highestUnlockedIndex;
-        final isActive = index == widget.activeIndex;
-
-        Color statusColor;
-        Color lineColor;
-        Color nextLineColor;
-
-        if (isLocked) {
-          statusColor = _LessonColors.lockedGray;
-          lineColor = _LessonColors.lockedGrayLight;
-        } else if (isCompleted) {
-          statusColor = _LessonColors.completedGreen;
-          lineColor = _LessonColors.completedGreen.withOpacity(0.4);
-        } else if (isActive) {
-          statusColor = app.AppColors.primary;
-          lineColor = app.AppColors.primary.withOpacity(0.4);
-        } else {
-          statusColor = app.AppColors.primary.withOpacity(0.7);
-          lineColor = app.AppColors.primary.withOpacity(0.3);
-        }
-
-        if (index < widget.lessons.length - 1) {
-          final nextProgress = widget.progressMap[widget.lessons[index + 1].id] ?? 0.0;
-          final nextIsCompleted = nextProgress >= 1.0;
-          final nextIsLocked = (index + 1) > highestUnlockedIndex;
-
-          if (nextIsLocked) {
-            nextLineColor = _LessonColors.lockedGrayLight;
-          } else if (nextIsCompleted) {
-            nextLineColor = _LessonColors.completedGreen.withOpacity(0.4);
-          } else {
-            nextLineColor = app.AppColors.primary.withOpacity(0.4);
-          }
-        } else {
-          nextLineColor = lineColor;
-        }
-
-        final state = _LessonState(
-          progress: progress,
-          isCompleted: isCompleted,
-          isLocked: isLocked,
-          isActive: isActive,
-          statusColor: statusColor,
-          lineColor: lineColor,
-          nextLineColor: nextLineColor,
-        );
-
-        // Assign a key for the target index so we can locate it later
-        final key = index == highestUnlockedIndex ? (_itemKeys[index] ??= GlobalKey()) : null;
-
-        return RepaintBoundary(
-          key: key,
-          child: _LessonCard(
-            lesson: lesson,
-            index: index,
-            progress: state.progress,
-            isLocked: state.isLocked,
-            isActive: state.isActive,
-            isCompleted: state.isCompleted,
-            isFirst: index == 0,
-            isLast: index == widget.lessons.length - 1,
-            statusColor: state.statusColor,
-            lineColor: state.lineColor,
-            nextLineColor: state.nextLineColor,
-            onTap: state.isLocked ? null : () => widget.onLessonTap(lesson),
-          ),
-        );
-      },
-    ),
-      ],
-    );
-  }
-}
-
-/// Pre-computed lesson state for performance
-class _LessonState {
-  final double progress;
-  final bool isCompleted;
-  final bool isLocked;
-  final bool isActive;
-  final Color statusColor;
-  final Color lineColor;
-  final Color nextLineColor;
-
-  const _LessonState({
-    required this.progress,
-    required this.isCompleted,
-    required this.isLocked,
-    required this.isActive,
-    required this.statusColor,
-    required this.lineColor,
-    required this.nextLineColor,
-  });
-}
-
-/// Painter that draws the vertical connector between lesson nodes.
-class LessonConnectorPainter extends CustomPainter {
-  final List<LessonModel> lessons;
-  final Map<String, double> progressMap;
-  final ScrollController scrollController;
-  final double itemHeight;
-  final double topPadding;
-  final ThemeData theme;
-
-  LessonConnectorPainter({
-    required this.lessons,
-    required this.progressMap,
-    required this.scrollController,
-    required this.itemHeight,
-    required this.topPadding,
-    required this.theme,
-  }) : super(repaint: scrollController);
-
-  static const double _lineX = 40.0; // x position of the connector center
-  static const double _lineWidth = 3.0;
-  // Stop drawing the connector at this lesson number (1-based)
-  static const int _endAtLessonNumber = 54;
-
-  Color _segmentColorFor(int index, int highestUnlockedIndex) {
-    // Completed segments are green, unlocked (next) segments are primary, locked are gray
-    final progress = progressMap[lessons[index].id] ?? 0.0;
-    final nextProgress = (index + 1) < lessons.length ? (progressMap[lessons[index + 1].id] ?? 0.0) : 0.0;
-    if (progress >= 1.0 && nextProgress >= 1.0) {
-      return _LessonColors.completedGreen;
-    }
-    if (index < highestUnlockedIndex) {
-      return app.AppColors.primary;
-    }
-    return _LessonColors.lockedGrayLight;
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (lessons.isEmpty) return;
-
-    final highestUnlockedIndex = _computeHighestUnlockedIndex();
-
-    final paint = Paint()
-      ..strokeWidth = _lineWidth
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    // visible viewport offsets
-    final offset = scrollController.hasClients ? scrollController.offset : 0.0;
-    // Clip drawing to the visible list area to avoid lines "penetrating"
-    canvas.save();
-    canvas.clipRect(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    // Determine last node index to draw up to (0-based)
-    int lastNodeIndex = lessons.length - 1;
-    final int maxNode = (_endAtLessonNumber - 1).clamp(0, lessons.length - 1);
-    if (lastNodeIndex > maxNode) lastNodeIndex = maxNode;
-
-    // Draw segments between node i and i+1 for i in [0, lastNodeIndex-1]
-    for (var i = 0; i < lastNodeIndex; i++) {
-      final startY = topPadding + (i * itemHeight) + (itemHeight / 2) - offset;
-      final endY = topPadding + ((i + 1) * itemHeight) + (itemHeight / 2) - offset;
-
-      // cheap skip if completely outside viewport
-      if (endY < 0 && startY < 0) continue;
-      if (startY > size.height && endY > size.height) continue;
-
-      // Clamp the drawn segment to the visible bounds to prevent overshoot
-      final drawStart = startY.clamp(0.0, size.height);
-      final drawEnd = endY.clamp(0.0, size.height);
-      if (drawEnd <= drawStart) continue;
-
-      paint.color = _segmentColorFor(i, highestUnlockedIndex);
-
-      // subtle glow for completed segments (drawn using clamped coords)
-      if (paint.color == _LessonColors.completedGreen) {
-        final glow = Paint()
-          ..color = paint.color.withOpacity(0.16)
-          ..strokeWidth = _lineWidth * 6
-          ..style = PaintingStyle.stroke
-          ..strokeCap = StrokeCap.round;
-        canvas.drawLine(Offset(_lineX, drawStart), Offset(_lineX, drawEnd), glow);
-      }
-
-      canvas.drawLine(Offset(_lineX, drawStart), Offset(_lineX, drawEnd), paint);
-    }
-
-    canvas.restore();
-  }
-
-  int _computeHighestUnlockedIndex() {
-    int highestCompletedIndex = -1;
-    for (var i = lessons.length - 1; i >= 0; i--) {
-      final progress = progressMap[lessons[i].id] ?? 0.0;
-      if (progress >= 1.0) {
-        highestCompletedIndex = i;
-        break;
-      }
-    }
-    if (highestCompletedIndex < 0) return 0;
-    return (highestCompletedIndex + 1).clamp(0, lessons.length - 1);
-  }
-
-  @override
-  bool shouldRepaint(covariant LessonConnectorPainter oldDelegate) {
-    return oldDelegate.lessons != lessons || oldDelegate.progressMap != progressMap || oldDelegate.scrollController != scrollController;
-  }
-}
-
-/// Individual lesson card - PERFORMANCE: Simplified, no IntrinsicHeight
-class _LessonCard extends StatelessWidget {
-  final LessonModel lesson;
-  final int index;
-  final double progress;
-  final bool isLocked;
-  final bool isActive;
-  final bool isCompleted;
-  final bool isFirst;
-  final bool isLast;
-  final Color statusColor;
-  final Color lineColor;
-  final Color nextLineColor;
-  final VoidCallback? onTap;
-
-  const _LessonCard({
-    required this.lesson,
-    required this.index,
-    required this.progress,
-    required this.isLocked,
-    required this.isActive,
-    required this.isCompleted,
-    required this.isFirst,
-    required this.isLast,
-    required this.statusColor,
-    required this.lineColor,
-    required this.nextLineColor,
-    required this.onTap,
-  });
-
-  IconData _getTypeIcon() {
-    switch (lesson.type) {
-      case 'alphabet':
-        return Icons.abc;
-      case 'vocabulary':
-        return Icons.book_rounded;
-      case 'grammar':
-        return Icons.rule_rounded;
-      case 'reading':
-        return Icons.menu_book_rounded;
-      case 'listening':
-        return Icons.headphones_rounded;
-      case 'speaking':
-        return Icons.mic_rounded;
-      case 'writing':
-        return Icons.edit_rounded;
-      case 'culture':
-        return Icons.temple_buddhist_rounded;
-      default:
-        return Icons.school_rounded;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    // PERFORMANCE: Fixed height for consistent layout, no IntrinsicHeight
-    final cardHeight = isActive ? 108.0 : 100.0;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SizedBox(
-        height: cardHeight,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Left: Progress Line & Circle - FIXED: Gradient transitions
-            SizedBox(
-              width: 48,
-              child: _buildProgressIndicator(cardHeight),
-            ),
-            const SizedBox(width: 12),
-            // Right: Card Content
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: _buildCard(context, theme),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// FIXED: Progress indicator with smooth gradient transitions between states
-  Widget _buildProgressIndicator(double cardHeight) {
-    final circleSize = isActive ? 42.0 : 36.0;
-    final circleTop = (cardHeight - circleSize) / 2;
-
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Top line segment (from top to circle center)
-        if (!isFirst)
-          Positioned(
-            top: 0,
-            left: 22.5, // Center of 48px width, minus half line width
-            child: Container(
-              width: 3,
-              height: circleTop + (circleSize / 2),
-              decoration: BoxDecoration(
-                // Use solid color for top segment (matches current lesson)
-                color: lineColor,
-                borderRadius: BorderRadius.circular(1.5),
-              ),
-            ),
-          ),
-        // Bottom line segment (from circle center to bottom)
-        if (!isLast)
-          Positioned(
-            top: circleTop + (circleSize / 2),
-            left: 22.5,
-            child: Container(
-              width: 3,
-              height: cardHeight - circleTop - (circleSize / 2),
-              decoration: BoxDecoration(
-                // FIXED: Gradient transition to next lesson's color
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [lineColor, nextLineColor],
-                ),
-                borderRadius: BorderRadius.circular(1.5),
-              ),
-            ),
-          ),
-        // Circle indicator - positioned absolutely to avoid gaps
-        Positioned(
-          top: circleTop,
-          child: Container(
-            width: circleSize,
-            height: circleSize,
-            decoration: BoxDecoration(
-              color: isLocked
-                  ? _LessonColors.lockedGrayLight
-                  : isCompleted
-                      ? statusColor
-                      : statusColor.withOpacity(0.15),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: statusColor,
-                width: isActive ? 3 : 2,
-              ),
-            ),
-            child: Icon(
-              isLocked
-                  ? Icons.lock_rounded
-                  : isCompleted
-                      ? Icons.check_rounded
-                      : _getTypeIcon(),
-              size: isActive ? 22 : 18,
-              color: isLocked
-                  ? _LessonColors.lockedGray
-                  : isCompleted
-                      ? Colors.white
-                      : statusColor,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCard(BuildContext context, ThemeData theme) {
-    final cardColor =
-        isActive ? statusColor.withOpacity(0.06) : theme.colorScheme.surface;
-
-    return Material(
-      color: cardColor,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isActive
-                  ? statusColor.withOpacity(0.3)
-                  : theme.dividerColor.withOpacity(0.12),
-              width: isActive ? 2 : 1,
-            ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Lesson number badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        'Хичээл ${index + 1}',
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: statusColor,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    // Title
-                    Text(
-                      lesson.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: isLocked
-                            ? theme.colorScheme.onSurfaceVariant
-                                .withOpacity(0.6)
-                            : theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    // Progress bar for in-progress lessons (no description to save space)
-                    if (!isLocked && progress > 0 && !isCompleted) ...[
-                      const SizedBox(height: 4),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: LinearProgressIndicator(
-                          value: progress.clamp(0.0, 1.0),
-                          minHeight: 4,
-                          backgroundColor: statusColor.withOpacity(0.15),
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(statusColor),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              // Right side action indicator
-              _buildActionIndicator(theme),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionIndicator(ThemeData theme) {
-    if (isLocked) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: _LessonColors.lockedGrayLight,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Icon(
-          Icons.lock_rounded,
-          color: _LessonColors.lockedGray,
-          size: 20,
-        ),
-      );
-    }
-
-    if (isCompleted) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: _LessonColors.completedGreen,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Icon(
-          Icons.check_rounded,
-          color: Colors.white,
-          size: 22,
-        ),
-      );
-    }
-
-    if (isActive) {
-      return Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          color: app.AppColors.primary,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Icon(
-          Icons.play_arrow_rounded,
-          color: Colors.white,
-          size: 26,
-        ),
-      );
-    }
-
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        color: statusColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Icon(
-        Icons.arrow_forward_ios_rounded,
-        color: statusColor,
-        size: 16,
       ),
     );
   }
@@ -1568,9 +918,12 @@ class _DictionaryFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return FloatingActionButton.extended(
       heroTag: 'dictionary_fab',
       onPressed: onPressed,
+      backgroundColor: theme.colorScheme.onSurface,
+      foregroundColor: theme.colorScheme.surface,
       icon: const Icon(Icons.menu_book_rounded),
       label: const Text('Толь'),
     );

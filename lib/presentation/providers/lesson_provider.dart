@@ -169,10 +169,25 @@ class LessonDetailState {
     }
 
     // QUESTION TYPE 4: Matching (connection) - appears after 50% of lesson
-    // Only add if we have at least 3 words
+    // Only add if we have at least 3 words with distinct pronunciations and
+    // translations. Duplicates would make the puzzle ambiguous (two identical
+    // cards) and could leave the user stuck, so we skip matching in that case.
     if (words.length >= 3 && advancedChance > 0.1) {
-      // Take 3 random words for matching
-      final matchWords = words.length <= 3 ? words : words.sublist(0, 3);
+      final seenLeft = <String>{};
+      final seenRight = <String>{};
+      final matchWords = <dynamic>[];
+      for (final w in words) {
+        final left = w.phonetic.trim().toLowerCase();
+        final right = w.mongolianTranslation.trim().toLowerCase();
+        if (left.isEmpty || right.isEmpty) continue;
+        if (seenLeft.contains(left) || seenRight.contains(right)) continue;
+        seenLeft.add(left);
+        seenRight.add(right);
+        matchWords.add(w);
+        if (matchWords.length >= 3) break;
+      }
+      // Only add matching if we found 3 unambiguous pairs.
+      if (matchWords.length < 3) return questions;
 
       questions.add({
         'id': 'matching_${lessonWithWords!.lesson.id}',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import '../../providers/auth_provider.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -20,7 +21,8 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with TickerProviderStateMixin {
   int _selectedIndex = 0; // navigation selection
   int _displayedIndex = 0; // which child is currently shown
   late final AnimationController _fadeController;
@@ -47,9 +49,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
     super.dispose();
   }
 
+  Future<void> _onTabSelected(int index) async {
+    if (index == _selectedIndex) return;
+
+    // Update selected state for the bar first so UI reflects choice
+    setState(() => _selectedIndex = index);
+
+    // Fade out current screen
+    await _fadeController.animateTo(0.0);
+
+    // Swap displayed child
+    if (!mounted) return;
+    setState(() => _displayedIndex = index);
+
+    // Fade in new screen
+    await _fadeController.animateTo(1.0);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      // Extend content behind the floating bar.
+      extendBody: true,
       body: Stack(
         children: List.generate(
           4,
@@ -74,50 +96,81 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
           },
         ),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) async {
-          if (index == _selectedIndex) return;
-
-          // Update selected state for the bar first so UI reflects choice
-          setState(() => _selectedIndex = index);
-
-          // Fade out current screen
-          await _fadeController.animateTo(0.0);
-
-          // Swap displayed child
-          if (!mounted) return;
-          setState(() => _displayedIndex = index);
-
-          // Fade in new screen
-          await _fadeController.animateTo(1.0);
-        },
-        destinations: [
-          NavigationDestination(
-            icon: Icon(Icons.school_outlined),
-            selectedIcon: Icon(Icons.school),
+      // Solid (opaque) package tab bar — exact-color tint, zero blur, all
+      // optical effects off, so nothing behind it is blurred or refracted.
+      bottomNavigationBar: GlassTabBar.bottom(
+        tabs: const [
+          GlassTab(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home_rounded),
             label: 'Сурах',
           ),
-            NavigationDestination(
-              icon: _selectedIndex == 1 ? const Icon(Icons.volunteer_activism) : const Icon(Icons.volunteer_activism_outlined),
-              selectedIcon: const Icon(Icons.volunteer_activism),
-              label: 'Тоолол',
-            ),
-          NavigationDestination(
+          GlassTab(
+            icon: Icon(Icons.volunteer_activism_outlined),
+            activeIcon: Icon(Icons.volunteer_activism),
+            label: 'Тоолол',
+          ),
+          GlassTab(
             icon: Icon(Icons.leaderboard_outlined),
-            selectedIcon: Icon(Icons.leaderboard),
+            activeIcon: Icon(Icons.leaderboard),
             label: 'Тэргүүлэгчид',
           ),
-          NavigationDestination(
+          GlassTab(
             icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
+            activeIcon: Icon(Icons.person),
             label: 'Профайл',
           ),
         ],
+        selectedIndex: _selectedIndex,
+        onTabSelected: _onTabSelected,
+        settings: LiquidGlassSettings(
+          // Direct alpha-composited tint, no luminance normalization.
+          bodyMode: GlassBodyMode.clear,
+          // No frost blur; fully opaque tint covers the backdrop completely.
+          blur: 0,
+          glassColor:
+              isDark ? Color(0xFF232329) : Colors.white,
+          // Kill every remaining optical effect for a flat solid surface.
+          lightIntensity: 0,
+          fresnelStrength: 0,
+          glowIntensity: 0,
+          chromaticAberration: 0,
+          saturation: 1,
+        ),
+        indicatorColor: isDark
+            ? const Color(0xFF3D3D47)
+            : const Color(0xFFE8E8EC),
+        indicatorSettings: LiquidGlassSettings(
+          bodyMode: GlassBodyMode.clear,
+          blur: 0,
+          glassColor: isDark
+              ? const Color(0xFF3D3D47)
+              : const Color(0xFFE8E8EC),
+          lightIntensity: 0,
+          fresnelStrength: 0,
+          glowIntensity: 0,
+          chromaticAberration: 0,
+          saturation: 1,
+        ),
+        selectedIconColor:
+            isDark ? Colors.white : const Color(0xFF101014),
+        unselectedIconColor: isDark
+            ? const Color(0xFF9C9CA6)
+            : const Color(0xFF8E8E96),
+        selectedLabelColor:
+            isDark ? Colors.white : const Color(0xFF101014),
+        unselectedLabelColor: isDark
+            ? const Color(0xFF9C9CA6)
+            : const Color(0xFF8E8E96),
+        // No touch glow on the solid surface.
+        glowOpacity: 0,
       ),
     );
   }
 }
+
+// Navigation uses GlassTabBar.bottom from liquid_glass_widgets
+// (solid opaque configuration in _HomeScreenState.build above).
 
 // =============================================================================
 // OLD _LearnTab REMOVED - Now using LessonsTab from lessons_tab.dart
@@ -432,7 +485,8 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
 
     try {
       final provider = CachedNetworkImageProvider(imageUrl);
-      final palette = await PaletteGenerator.fromImageProvider(provider, maximumColorCount: 8);
+      final palette = await PaletteGenerator.fromImageProvider(provider,
+          maximumColorCount: 8);
       final color = palette.dominantColor?.color ?? palette.vibrantColor?.color;
       if (color != null) {
         _dominantCache[key] = color;
@@ -445,7 +499,9 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
-    if (user != null) _ensureDominant(user.avatarUrl, user.id.isNotEmpty ? user.id : user.displayName);
+    if (user != null)
+      _ensureDominant(
+          user.avatarUrl, user.id.isNotEmpty ? user.id : user.displayName);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -474,8 +530,12 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          ( _dominantColor ?? Theme.of(context).colorScheme.primary ).withOpacity(0.95),
-                          ( _dominantColor ?? Theme.of(context).colorScheme.primary ).withOpacity(0.45),
+                          (_dominantColor ??
+                                  Theme.of(context).colorScheme.primary)
+                              .withOpacity(0.95),
+                          (_dominantColor ??
+                                  Theme.of(context).colorScheme.primary)
+                              .withOpacity(0.45),
                           Theme.of(context).scaffoldBackgroundColor,
                         ],
                         begin: Alignment.topLeft,
@@ -500,22 +560,45 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                           children: [
                             Align(
                               alignment: Alignment.topCenter,
-                              child: AppAvatar(imageUrl: user.avatarUrl, name: user.displayName, size: 80),
+                              child: AppAvatar(
+                                  imageUrl: user.avatarUrl,
+                                  name: user.displayName,
+                                  size: 80),
                             ),
                             const SizedBox(width: 16),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(user.displayName, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+                                  Text(user.displayName,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 4),
-                                  if (user.username != null && user.username!.isNotEmpty)
-                                    Text('@${user.username}', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                                  if (user.username != null &&
+                                      user.username!.isNotEmpty)
+                                    Text('@${user.username}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurfaceVariant)),
                                   const SizedBox(height: 8),
-                                  if (user.bio != null && user.bio!.isNotEmpty) ...[
+                                  if (user.bio != null &&
+                                      user.bio!.isNotEmpty) ...[
                                     ExpandableText(
                                       text: user.bio!,
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface),
                                       maxLines: 2,
                                     ),
                                     const SizedBox(height: 8),
@@ -523,12 +606,29 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                                   Row(
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                        decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary.withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
-                                        child: Text('Түвшин ${user.level}', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).colorScheme.primary)),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.12),
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
+                                        child: Text('Түвшин ${user.level}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary)),
                                       ),
                                       const SizedBox(width: 8),
-                                      Text('${user.lessonsCompleted} хичээл', style: Theme.of(context).textTheme.bodySmall),
+                                      Text('${user.lessonsCompleted} хичээл',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall),
                                     ],
                                   ),
                                 ],
@@ -543,13 +643,18 @@ class _ProfileTabState extends ConsumerState<_ProfileTab> {
                           children: [
                             _buildStat(context, '${user.totalXp}', 'XP'),
                             _buildStat(context, '${user.streak}', 'Streak'),
-                            _buildStat(context, '${user.followerCount}', 'Дагагч'),
-                            _buildStat(context, '${user.followingCount}', 'Дагадаг'),
+                            _buildStat(
+                                context, '${user.followerCount}', 'Дагагч'),
+                            _buildStat(
+                                context, '${user.followingCount}', 'Дагадаг'),
                           ],
                         ),
                         const SizedBox(height: 12),
                         // Level progress
-                        LevelProgress(currentXp: user.totalXp % 1000, xpForNextLevel: 1000, level: user.level),
+                        LevelProgress(
+                            currentXp: user.totalXp % 1000,
+                            xpForNextLevel: 1000,
+                            level: user.level),
                       ],
                     ),
                   ),

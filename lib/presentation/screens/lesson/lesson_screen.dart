@@ -51,8 +51,8 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
   String? _selectedLeftMatch;
   String? _selectedRightMatch;
   final Set<String> _matchedPairs = {};
-  // Use computed pair keys (left||right) to avoid relying on external id types
-  String _pairKey(String left, String right) => '$left|$right';
+  // Use normalized pair keys (left||right) to avoid whitespace mismatches
+  String _pairKey(String left, String right) => '${_normalize(left)}||${_normalize(right)}';
   bool _matchingComplete = false;
   bool _matchingFailed = false;
   String? _wrongLeft;
@@ -200,6 +200,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
       _selectedRightMatch = null;
       _matchedPairs.clear();
       _matchingComplete = false;
+      _matchingFailed = false;
+      _wrongLeft = null;
+      _wrongRight = null;
     });
 
     await _fadeController.reverse();
@@ -375,10 +378,13 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
     final questionType = currentQuestion['type'] as String;
 
     // Determine whether the bottom action should be visible (slide up).
-    // For matching questions we deliberately hide the bottom action UI entirely.
+    // For matching questions always show the bottom bar so the user can
+    // see progress and tap Continue once all pairs are matched.
+    // Previously this was hard-coded to false, which left matching with
+    // no way to advance (stuck screen).
     bool isAnswered;
     if (questionType == 'matching') {
-      isAnswered = false;
+      isAnswered = true;
     } else if (questionType == 'fill_in_blank') {
       isAnswered = _filledAnswer != null;
     } else {
@@ -903,12 +909,19 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
   // --------------------------------------------------------------------------
   Widget _buildMatchingQuestion(Map<String, dynamic> question) {
     final pairs = (question['pairs'] as List?) ?? [];
+    if (pairs.isEmpty) {
+      return const Center(child: Text('Тохируулах асуулт хоосон байна'));
+    }
 
-    // Create left (pronunciations) and right (translations) lists
+    // Create left (pronunciations) in original order and right (translations)
+    // as sorted pair objects (not plain strings) so duplicate texts still map
+    // to the correct pair. Sorting pairs by normalized right text keeps the
+    // right column shuffled deterministically.
     final leftItems = pairs.map((p) => p['left'] as String).toList();
-    final rightItems =
-        List<String>.from(pairs.map((p) => p['right'] as String).toList())
-          ..sort(); // Shuffle right side deterministically by sorting
+    final rightPairs = List<Map<String, dynamic>>.from(
+      pairs.map((p) => Map<String, dynamic>.from(p as Map)),
+    )..sort((a, b) => _normalize(a['right'] as String?)
+        .compareTo(_normalize(b['right'] as String?)));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -966,7 +979,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
                   final pairRight = pairs[index]['right'] as String;
                   final pairKey = _pairKey(pairLeft, pairRight);
                   final isMatched = _matchedPairs.contains(pairKey);
-                  final isSelected = _selectedLeftMatch == item && !isMatched;
+                  final isSelected = _selectedLeftMatch != null &&
+                      _normalize(_selectedLeftMatch) == _normalize(item) &&
+                      !isMatched;
 
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
@@ -1015,16 +1030,15 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
             // Right column - Mongolian translations
             Expanded(
               child: Column(
-                children: rightItems.map((item) {
-                  final matchingPair = pairs.firstWhere(
-                    (p) => _normalize(p['right'] as String) == _normalize(item),
-                    orElse: () => {'id': ''},
-                  );
-                  final pairLeft = matchingPair['left'] as String? ?? '';
-                  final pairRight = matchingPair['right'] as String? ?? '';
+                children: rightPairs.map((pair) {
+                  final item = pair['right'] as String? ?? '';
+                  final pairLeft = pair['left'] as String? ?? '';
+                  final pairRight = pair['right'] as String? ?? '';
                   final pairKey = _pairKey(pairLeft, pairRight);
                   final isMatched = _matchedPairs.contains(pairKey);
-                  final isSelected = _selectedRightMatch == item && !isMatched;
+                  final isSelected = _selectedRightMatch != null &&
+                      _normalize(_selectedRightMatch) == _normalize(item) &&
+                      !isMatched;
 
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
@@ -1055,7 +1069,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
         // Progress indicator
         const SizedBox(height: 20),
         LinearProgressIndicator(
-          value: _matchedPairs.length / pairs.length,
+          value: pairs.isEmpty ? 0 : _matchedPairs.length / pairs.length,
           backgroundColor:
               Theme.of(context).colorScheme.surfaceContainerHighest,
           valueColor: AlwaysStoppedAnimation(AppColors.success),
@@ -1069,6 +1083,47 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
               ),
           textAlign: TextAlign.center,
         ),
+        // Success banner once all pairs are matched so users know to tap
+        // the Continue button below. Previously there was no feedback and
+        // no button, so the lesson appeared stuck.
+        if (_matchingComplete) ...[
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.success.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.success.withOpacity(0.4)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.check_circle_rounded,
+                    color: AppColors.success, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Бүгд зөв! Доорх Үргэлжлүүлэх товчийг дарна уу',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.success,
+                          fontWeight: FontWeight.w600,
+                        ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+        // Manual reset if the user wants to retry matching from scratch.
+        if (!_matchingComplete && _matchedPairs.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          TextButton.icon(
+            onPressed: _resetMatchingAttempt,
+            icon: const Icon(Icons.refresh_rounded, size: 18),
+            label: const Text('Эхнээс дахин оролдох'),
+          ),
+        ],
       ],
     );
   }
@@ -1083,7 +1138,13 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
     Color bgColor;
     Color borderColor;
 
-    final isWrong = !isMatched && ((isLeft && text == _wrongLeft) || (!isLeft && text == _wrongRight));
+    final isWrong = !isMatched &&
+        ((isLeft &&
+                _wrongLeft != null &&
+                _normalize(text) == _normalize(_wrongLeft)) ||
+            (!isLeft &&
+                _wrongRight != null &&
+                _normalize(text) == _normalize(_wrongRight)));
 
     if (isMatched) {
       bgColor = AppColors.success.withOpacity(0.15);
@@ -1368,10 +1429,55 @@ class _LessonScreenState extends ConsumerState<LessonScreen>
 
   Widget _buildBottomAction(
       Map<String, dynamic> question, String questionType) {
-    // Do not show a bottom action for matching questions — inline matching UI
-    // handles selection and validation.
+    // Matching uses its own bottom bar: disabled progress hint until all
+    // pairs are matched, then an enabled Continue button.
+    // This fixes the stuck-screen bug where matching completed (3/3) but
+    // there was no way to advance because the button was hidden.
     if (questionType == 'matching') {
-      return const SizedBox.shrink();
+      final pairs = (question['pairs'] as List?) ?? [];
+      final total = pairs.length;
+      final done = _matchedPairs.length;
+      final isReady = _matchingComplete && done == total && total > 0;
+
+      return Container(
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -4),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          top: false,
+          child: SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: ElevatedButton(
+              onPressed: !isReady ? null : () => _nextQuestion(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isReady ? AppColors.success : null,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                elevation: 0,
+              ),
+              child: Text(
+                isReady
+                    ? 'Үргэлжлүүлэх'
+                    : 'Бүгдийг тохируулна уу ($done/$total)',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
     }
     bool isAnswered;
     if (questionType == 'matching') {

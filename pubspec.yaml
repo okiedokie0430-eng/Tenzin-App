@@ -55,6 +55,10 @@ dependencies:
   # Lottie animations
   lottie: ^2.4.0
 
+  # Navigation chrome (solid opaque tab bar, no backdrop blur)
+  liquid_glass_widgets: ^1.10.0
+  cupertino_icons: ^1.0.8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -98,7 +98,9 @@ class HeartRepository {
     HeartStateModel heartState,
   ) async {
     try {
-      await _heartDao.update(heartState.copyWith(syncStatus: SyncStatus.pending));
+      // Upsert locally (insert with replace) so first-ever writes create the
+      // row instead of silently updating zero rows, then push to Appwrite.
+      await _heartDao.insert(heartState.copyWith(syncStatus: SyncStatus.pending));
       
       // Sync to remote in background
       _syncHeartStateInBackground(heartState);

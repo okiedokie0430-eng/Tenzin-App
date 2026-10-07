@@ -4,7 +4,11 @@ import '../../data/models/heart_state.dart';
 import '../../core/error/failures.dart';
 import '../../core/platform/secure_storage.dart';
 import '../../core/constants/app_constants.dart';
+import '../../core/utils/logger.dart';
 import 'auth_provider.dart';
+import 'core_providers.dart';
+import 'remote_providers.dart';
+import 'repository_providers.dart';
 
 // Heart State
 class HeartProviderState {
@@ -46,11 +50,12 @@ class HeartProviderState {
 
 // Heart Notifier
 class HeartNotifier extends StateNotifier<HeartProviderState> {
+  final Ref _ref;
   Timer? _countdownTimer;
   DateTime? _regenerationStartTime;
   bool _isDisposed = false;
 
-  HeartNotifier(Ref ref) : super(HeartProviderState.initial);
+  HeartNotifier(this._ref) : super(HeartProviderState.initial);
 
   @override
   void dispose() {
@@ -67,8 +72,9 @@ class HeartNotifier extends StateNotifier<HeartProviderState> {
 
   Future<void> loadHeartState(String userId) async {
     if (_isDisposed) return;
+    final prev = state.heartState;
     _safeUpdate((s) => s.copyWith(isLoading: true, failure: null));
-    
+
     try {
       // Read persisted lightweight heart state from secure storage
       final storage = SecureStorageService();
@@ -102,13 +108,9 @@ class HeartNotifier extends StateNotifier<HeartProviderState> {
         // Advance lastChange forward by the regenerated cycles
         final advanced = lastChange.add(Duration(minutes: toRegenerate * regenPerMinutes));
         lastChange = advanced.isAfter(now) ? now : advanced;
-
-        // Persist updated values
-        await storage.write(currentKey, current.toString());
-        await storage.write(lastChangeKey, lastChange.toIso8601String());
       }
 
-      final model = HeartStateModel(
+      var model = HeartStateModel(
         userId: userId,
         currentHearts: current,
         lastHeartLossAt: null,
@@ -116,7 +118,44 @@ class HeartNotifier extends StateNotifier<HeartProviderState> {
         lastModifiedAt: DateTime.now().millisecondsSinceEpoch,
       );
 
+      // Reconcile with SQLite (source of truth for sync): adopt whichever
+      // side has the most recent heart event so local progress is never
+      // lost and state converges across app restarts.
+      try {
+        final repo = _ref.read(heartRepositoryProvider);
+        final dbResult = await repo.getHeartState(userId);
+        final dbModel = dbResult.heartState;
+        if (dbModel != null) {
+          model = _newerHeartModel(model, dbModel);
+        }
+      } catch (e) {
+        AppLogger.warning('Heart load: DB reconcile skipped: $e');
+      }
+
+      // Pull remote state when online so a second device sees the latest.
+      try {
+        final networkInfo = _ref.read(networkInfoProvider);
+        if (await networkInfo.isConnected) {
+          final remote = _ref.read(heartRemoteProvider);
+          final remoteModel = await remote.getHeartState(userId);
+          if (remoteModel != null) {
+            final regenerated = remoteModel.regenerate();
+            if (_eventTime(regenerated).isAfter(_eventTime(model))) {
+              model = regenerated;
+            }
+          }
+        }
+      } catch (e) {
+        AppLogger.warning('Heart load: remote pull skipped: $e');
+      }
+
       _safeUpdate((s) => s.copyWith(isLoading: false, heartState: model));
+
+      // Persist to secure storage + SQLite (which pushes to Appwrite).
+      // Skipped when nothing changed (e.g. repeated reloads).
+      if (!_sameHeartState(prev, model)) {
+        await _persistHeartState(userId, model);
+      }
 
       _startCountdownTimer(userId);
     } catch (e) {
@@ -124,6 +163,65 @@ class HeartNotifier extends StateNotifier<HeartProviderState> {
         isLoading: false,
         failure: Failure.unknown(e.toString()),
       ));
+    }
+  }
+
+  /// Latest heart event (loss or regen) — used to pick the newest state
+  /// when reconciling secure storage, SQLite and Appwrite.
+  DateTime _eventTime(HeartStateModel m) {
+    final loss = m.lastHeartLossAt;
+    final regen = m.lastRegenerationAt;
+    if (loss == null && regen == null) {
+      return DateTime.fromMillisecondsSinceEpoch(0);
+    }
+    if (loss == null) return regen!;
+    if (regen == null) return loss;
+    return loss.isAfter(regen) ? loss : regen;
+  }
+
+  /// Returns whichever model has the most recent heart event.
+  /// Ties break toward [b] (the database side).
+  HeartStateModel _newerHeartModel(HeartStateModel a, HeartStateModel b) {
+    final ta = _eventTime(a);
+    final tb = _eventTime(b);
+    if (tb.isAfter(ta)) return b;
+    if (ta.isAfter(tb)) return a;
+    return b;
+  }
+
+  bool _sameHeartState(HeartStateModel? a, HeartStateModel b) {
+    if (a == null || a.userId != b.userId) return false;
+    return a.currentHearts == b.currentHearts &&
+        a.lastHeartLossAt?.millisecondsSinceEpoch ==
+            b.lastHeartLossAt?.millisecondsSinceEpoch &&
+        a.lastRegenerationAt?.millisecondsSinceEpoch ==
+            b.lastRegenerationAt?.millisecondsSinceEpoch;
+  }
+
+  /// Writes heart state to secure storage (fast local cache) AND to SQLite
+  /// via the repository, which syncs to Appwrite in the background.
+  /// Never throws — sync failures must not break the UI.
+  Future<void> _persistHeartState(String userId, HeartStateModel model) async {
+    if (_isDisposed) return;
+    try {
+      final storage = SecureStorageService();
+      await storage.write(
+        AppConstants.keyHeartCurrentPrefix + userId,
+        model.currentHearts.toString(),
+      );
+      final change =
+          model.lastRegenerationAt ?? model.lastHeartLossAt ?? DateTime.now();
+      await storage.write(
+        AppConstants.keyHeartLastChangePrefix + userId,
+        change.toIso8601String(),
+      );
+    } catch (e) {
+      AppLogger.warning('Heart persist: secure storage failed: $e');
+    }
+    try {
+      await _ref.read(heartRepositoryProvider).updateHeartState(model);
+    } catch (e) {
+      AppLogger.warning('Heart persist: database sync failed: $e');
     }
   }
 
@@ -182,10 +280,6 @@ class HeartNotifier extends StateNotifier<HeartProviderState> {
     final currentModel = state.heartState!;
 
     // Compute how many hearts should be regenerated from device time
-    final storage = SecureStorageService();
-    final currentKey = AppConstants.keyHeartCurrentPrefix + userId;
-    final lastChangeKey = AppConstants.keyHeartLastChangePrefix + userId;
-
     final lastChange = currentModel.lastRegenerationAt ?? DateTime.now();
     final now = DateTime.now();
     final elapsed = now.difference(lastChange);
@@ -205,31 +299,23 @@ class HeartNotifier extends StateNotifier<HeartProviderState> {
       lastModifiedAt: DateTime.now().millisecondsSinceEpoch,
     );
 
-    try {
-      await storage.write(currentKey, updated.currentHearts.toString());
-      await storage.write(lastChangeKey, newLastChange.toIso8601String());
+    if (_isDisposed) return;
 
-      if (_isDisposed) return;
+    _regenerationStartTime = DateTime.now();
+    _safeUpdate((s) => s.copyWith(heartState: updated));
 
-      _regenerationStartTime = DateTime.now();
-      _safeUpdate((s) => s.copyWith(heartState: updated));
+    // Persist to secure storage + SQLite (syncs to Appwrite in background).
+    await _persistHeartState(userId, updated);
 
-      if (updated.isFull) {
-        _countdownTimer?.cancel();
-        _safeUpdate((s) => s.copyWith(timeUntilNext: Duration.zero));
-      }
-    } catch (_) {
-      // Ignore storage failures silently for regeneration
+    if (updated.isFull) {
+      _countdownTimer?.cancel();
+      _safeUpdate((s) => s.copyWith(timeUntilNext: Duration.zero));
     }
   }
 
   Future<bool> useHeart(String userId) async {
     if (_isDisposed || !state.canUseHeart) return false;
     try {
-      final storage = SecureStorageService();
-      final currentKey = AppConstants.keyHeartCurrentPrefix + userId;
-      final lastChangeKey = AppConstants.keyHeartLastChangePrefix + userId;
-
       final now = DateTime.now();
       final current = state.heartState!.currentHearts - 1;
 
@@ -240,13 +326,14 @@ class HeartNotifier extends StateNotifier<HeartProviderState> {
         lastModifiedAt: now.millisecondsSinceEpoch,
       );
 
-      await storage.write(currentKey, updated.currentHearts.toString());
-      await storage.write(lastChangeKey, now.toIso8601String());
-
       if (_isDisposed) return false;
 
       _regenerationStartTime = now;
       _safeUpdate((s) => s.copyWith(heartState: updated));
+
+      // Persist to secure storage + SQLite (syncs to Appwrite in background).
+      await _persistHeartState(userId, updated);
+
       _startCountdownTimer(userId);
       return true;
     } catch (e) {
@@ -258,20 +345,15 @@ class HeartNotifier extends StateNotifier<HeartProviderState> {
   Future<void> refillHearts(String userId) async {
     if (_isDisposed) return;
     try {
-      final storage = SecureStorageService();
-      final currentKey = AppConstants.keyHeartCurrentPrefix + userId;
-      final lastChangeKey = AppConstants.keyHeartLastChangePrefix + userId;
-
-      final now = DateTime.now();
-
       final updated = state.heartState?.refillHearts() ?? HeartStateModel.initial(userId);
-
-      await storage.write(currentKey, updated.currentHearts.toString());
-      await storage.write(lastChangeKey, now.toIso8601String());
 
       if (_isDisposed) return;
 
       _safeUpdate((s) => s.copyWith(heartState: updated));
+
+      // Persist to secure storage + SQLite (syncs to Appwrite in background).
+      await _persistHeartState(userId, updated);
+
       _countdownTimer?.cancel();
       _safeUpdate((s) => s.copyWith(timeUntilNext: Duration.zero));
     } catch (e) {
